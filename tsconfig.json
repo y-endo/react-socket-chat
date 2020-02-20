@@ -21,7 +21,7 @@
     "isolatedModules": true,
     "baseUrl": ".",
     "paths": {
-      "~/*": ["./src/ts/*"]
+      "~/*": ["./src/*"]
     },
     "typeRoots": ["node_modules/@types", "./src/ts/@types"]
   },

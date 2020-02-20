@@ -19,12 +19,24 @@ module.exports = {
         test: /\.ts$|\.tsx$/,
         exclude: /node_modules/,
         loader: 'babel-loader'
+      },
+      {
+        test: /\.scss$/,
+        use: [
+          {
+            loader: 'css-loader',
+            options: {
+              modules: true
+            }
+          },
+          { loader: 'sass-loader' }
+        ]
       }
     ]
   },
   resolve: {
     alias: {
-      '~': path.resolve(__dirname, './src/ts')
+      '~': path.resolve(__dirname, './src')
     },
     extensions: ['.ts', '.tsx', '.js']
   },
