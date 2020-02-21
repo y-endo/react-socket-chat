@@ -6,7 +6,9 @@ const io = require('socket.io')(httpServer);
 app.use(express.static('public'));
 
 io.on('connection', socket => {
-  console.log('connection');
+  socket.on('message', message => {
+    io.emit('message', message);
+  });
 });
 
 httpServer.listen(3030, () => {

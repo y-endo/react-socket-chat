@@ -4,7 +4,7 @@ import css from '~/scss/components/AppHeader.scss';
 const AppHeader: React.FC = () => {
   return (
     <>
-      <header className={css.header}>ヘッダー</header>
+      <header className={css['header']}>ヘッダー</header>
     </>
   );
 };

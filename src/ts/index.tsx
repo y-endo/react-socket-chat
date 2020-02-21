@@ -1,8 +1,12 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import io from 'socket.io-client';
-import App from './App';
+import { Provider } from 'react-redux';
+import store from '~/ts/store';
+import App from '~/ts/App';
 
-// const socket: SocketIOClient.Socket = io();
-
-ReactDOM.render(<App />, document.querySelector('#app'));
+ReactDOM.render(
+  <Provider store={store}>
+    <App />
+  </Provider>,
+  document.querySelector('#app')
+);
