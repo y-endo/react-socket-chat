@@ -2,7 +2,8 @@ import { reducerWithInitialState } from 'typescript-fsa-reducers';
 import { actionCreatorFactory } from 'typescript-fsa';
 
 export interface ChatRoomState {
-  socket: SocketIOClient.Socket | null;
+  roomId: number;
+  messages: string[];
 }
 
 const actionCreator = actionCreatorFactory();
@@ -10,22 +11,29 @@ const actionCreator = actionCreatorFactory();
 /**
  * ActionType
  */
-const SET_SOCKET = 'SET_SOCKET';
+const SET_ROOM_ID = 'SET_ROOM_ID';
+const ADD_MESSAGE = 'ADD_MESSAGE';
 
 /**
  * Actions
  */
-export const setSocket = actionCreator<SocketIOClient.Socket>(SET_SOCKET);
+export const setRoomId = actionCreator<number>(SET_ROOM_ID);
+export const addMessage = actionCreator<string>(ADD_MESSAGE);
 
 /**
  * State
  */
 const initialState: ChatRoomState = {
-  socket: null
+  roomId: -1,
+  messages: []
 };
 
-const reducer = reducerWithInitialState(initialState).case(setSocket, (state, payload) => {
-  return { ...state, socket: payload };
-});
+const reducer = reducerWithInitialState(initialState)
+  .case(setRoomId, (state, payload) => {
+    return { ...state, roomId: payload };
+  })
+  .case(addMessage, (state, payload) => {
+    return { ...state, messages: state.messages.concat(payload) };
+  });
 
 export default reducer;
