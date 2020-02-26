@@ -2,8 +2,33 @@ const express = require('express');
 const app = express();
 const httpServer = require('http').Server(app);
 const io = require('socket.io')(httpServer);
+const session = require('express-session');
+const path = require('path');
+const uuid = require('node-uuid');
+const fs = require('fs');
 
-app.use(express.static('public'));
+app.use(
+  session({
+    secret: 'secret',
+    resave: false,
+    saveUninitialized: false
+  })
+);
+
+app.use('/assets', express.static(path.resolve(__dirname, '../../public/assets')));
+
+app.post('/login', (req, res) => {
+  if (!req.session.session_id) {
+    req.session.session_id = uuid.v4();
+  }
+  res.redirect('/');
+});
+
+app.get('*', (req, res) => {
+  fs.readFile(path.resolve(__dirname, '../../public/index.html'), (_, data) => {
+    res.send(data.toString().replace('$session_id', req.session.session_id));
+  });
+});
 
 io.on('connection', socket => {
   socket.on('message', message => {
