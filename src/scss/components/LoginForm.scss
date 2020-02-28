@@ -1,0 +1,24 @@
+@charset "UTF-8";
+
+.form {
+  width: 1200px;
+  margin: 0 auto;
+  padding: 60px 0;
+  text-align: center;
+}
+
+.input {
+  display: block;
+  width: 800px;
+  margin: 0 auto;
+  padding: 6px 8px;
+  font-size: 1.8rem;
+  border: solid 1px #ccc;
+}
+
+.button {
+  display: inline-block;
+  margin: 20px auto 0;
+  padding: 5px 15px;
+  border-radius: 5px;
+}

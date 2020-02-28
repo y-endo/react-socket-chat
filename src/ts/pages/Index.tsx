@@ -1,26 +1,17 @@
 import * as React from 'react';
 import { Redirect } from 'react-router-dom';
-import css from '~/scss/pages.scss';
 
-import Layout from '~/ts/layouts/index';
-import ChatRoom from '~/ts/containers/ChatRoom';
+import Layout from '~/ts/layouts/default';
+import RoomList from '~/ts/components/RoomList';
 
 declare global {
   interface Window {
-    session_id: string;
+    sessionId: string;
   }
 }
 
 const Index: React.FC = () => {
-  const content = window.session_id ? (
-    <div className={css['page']}>
-      <div className={css['page__inner']}>
-        <ChatRoom />
-      </div>
-    </div>
-  ) : (
-    <Redirect to="/login" />
-  );
+  const content = window.sessionId ? <RoomList /> : <Redirect to="/login" />;
 
   return <Layout content={content} />;
 };

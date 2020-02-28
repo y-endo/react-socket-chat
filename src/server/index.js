@@ -18,15 +18,16 @@ app.use(
 app.use('/assets', express.static(path.resolve(__dirname, '../../public/assets')));
 
 app.post('/login', (req, res) => {
-  if (!req.session.session_id) {
-    req.session.session_id = uuid.v4();
+  if (!req.session.sessionId) {
+    req.session.sessionId = uuid.v4();
   }
   res.redirect('/');
 });
 
 app.get('*', (req, res) => {
   fs.readFile(path.resolve(__dirname, '../../public/index.html'), (_, data) => {
-    res.send(data.toString().replace('$session_id', req.session.session_id));
+    const sessionId = req.session.sessionId;
+    res.send(data.toString().replace('$sessionId', sessionId ? `"${sessionId}"` : null));
   });
 });
 
