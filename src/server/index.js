@@ -7,6 +7,8 @@ const path = require('path');
 const uuid = require('node-uuid');
 const fs = require('fs');
 
+const store = {};
+
 app.use(
   session({
     secret: 'secret',
@@ -20,14 +22,14 @@ app.use('/assets', express.static(path.resolve(__dirname, '../../public/assets')
 app.post('/login', (req, res) => {
   if (!req.session.sessionId) {
     req.session.sessionId = uuid.v4();
+    store.sessionId = req.session.sessionId;
   }
   res.redirect('/');
 });
 
-app.get('*', (req, res) => {
+app.get('*', (_, res) => {
   fs.readFile(path.resolve(__dirname, '../../public/index.html'), (_, data) => {
-    const sessionId = req.session.sessionId;
-    res.send(data.toString().replace('$sessionId', sessionId ? `"${sessionId}"` : null));
+    res.send(data.toString().replace('$sessionId', store.sessionId ? `"${store.sessionId}"` : null));
   });
 });
 

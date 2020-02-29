@@ -4,3 +4,7 @@ declare module '*.scss' {
   };
   export = content;
 }
+
+interface Window {
+  sessionId: string;
+}
