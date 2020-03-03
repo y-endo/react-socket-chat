@@ -6,5 +6,8 @@ declare module '*.scss' {
 }
 
 interface Window {
-  sessionId: string;
+  app: {
+    sessionId: string;
+    userName: string;
+  };
 }

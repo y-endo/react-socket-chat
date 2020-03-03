@@ -5,7 +5,7 @@ import Layout from '~/ts/layouts/default';
 import LoginForm from '~/ts/components/LoginForm';
 
 const Login: React.FC = () => {
-  const content = window.sessionId ? <Redirect to="/" /> : <LoginForm />;
+  const content = window.app.sessionId ? <Redirect to="/" /> : <LoginForm />;
 
   return <Layout content={content} />;
 };
