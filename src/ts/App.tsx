@@ -4,7 +4,7 @@ import { BrowserRouter as Router, Route, Switch, Redirect } from 'react-router-d
 import '~/scss/foundation/reset.scss';
 import '~/scss/foundation/base.scss';
 
-import Auth from '~/ts/components/Auth';
+import Auth from '~/ts/components/common/Auth';
 import Index from '~/ts/pages/Index';
 import Login from '~/ts/pages/Login';
 import Room from '~/ts/pages/Room';

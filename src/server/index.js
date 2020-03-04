@@ -8,8 +8,6 @@ const path = require('path');
 const uuid = require('node-uuid');
 const fs = require('fs');
 
-const store = {};
-
 app.use(
   bodyParser.urlencoded({
     extended: false
@@ -28,29 +26,39 @@ app.use('/assets', express.static(path.resolve(__dirname, '../../public/assets')
 app.post('/login', (req, res) => {
   if (!req.session.sessionId) {
     req.session.sessionId = uuid.v4();
-    store.userName = req.body['user-name'];
-    store.sessionId = req.session.sessionId;
   }
+  if (!req.session.userName && req.body['user-name']) {
+    req.session.userName = req.body['user-name'];
+  }
+
   res.redirect('/');
 });
 
-app.get('*', (_, res) => {
+app.get('*', (req, res) => {
   fs.readFile(path.resolve(__dirname, '../../public/index.html'), (_, data) => {
     const out = data
       .toString()
-      .replace('$sessionId', store.sessionId ? `"${store.sessionId}"` : null)
-      .replace('$userName', store.userName ? `"${store.userName}"` : null);
+      .replace('$sessionId', req.session.sessionId ? `"${req.session.sessionId}"` : null)
+      .replace('$userName', req.session.userName ? `"${req.session.userName}"` : null);
     res.send(out);
   });
 });
 
 io.on('connection', socket => {
-  socket.on('join', room => {
-    store.room = room;
+  let room = null;
+
+  // 入室
+  socket.on('join', payload => {
+    room = payload;
     socket.join(room);
   });
-  socket.on('message', message => {
-    io.to(store.room).emit('message', message);
+  // 退室
+  socket.on('leave', payload => {
+    socket.leave(payload);
+  });
+  // チャット受信+送信
+  socket.on('message', payload => {
+    if (room) io.to(room).emit('message', payload);
   });
 });
 

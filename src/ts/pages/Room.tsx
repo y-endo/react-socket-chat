@@ -1,38 +1,22 @@
 import * as React from 'react';
 import { RouteComponentProps } from 'react-router-dom';
-import io from 'socket.io-client';
+
+import Layout from '~/ts/layouts/default';
+import ChatRoom from '~/ts/containers/ChatRoom';
 
 type Props = {} & RouteComponentProps<{ id: string }>;
 
 const Room: React.FC<Props> = ({ match }) => {
-  const input = React.useRef<HTMLInputElement>(null);
-  const socket = React.useRef<SocketIOClient.Socket>(io());
+  React.useEffect(() => {}, []);
 
-  const onSubmit = (event: React.FormEvent) => {
-    event.preventDefault();
-
-    if (input.current) {
-      const value = input.current.value;
-
-      socket.current.emit('message', value);
-    }
-  };
-
-  React.useEffect(() => {
-    socket.current.emit('join', parseInt(match.params.id, 10));
-    socket.current.on('message', (message: string) => {
-      console.log(message);
-    });
-  }, []);
-
-  return (
+  const content = (
     <div>
       <h1>Room {match.params.id}</h1>
-      <form onSubmit={onSubmit}>
-        <input type="text" ref={input} />
-      </form>
+      <ChatRoom roomId={match.params.id} />
     </div>
   );
+
+  return <Layout content={content} />;
 };
 
 export default Room;
