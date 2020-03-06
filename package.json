@@ -44,6 +44,7 @@
     "webpack-dev-server": "^3.10.3"
   },
   "dependencies": {
+    "@welldone-software/why-did-you-render": "^4.0.5",
     "body-parser": "^1.19.0",
     "core-js": "^3.6.4",
     "express": "^4.17.1",

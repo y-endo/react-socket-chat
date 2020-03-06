@@ -1,6 +1,10 @@
 @charset "UTF-8";
 
+@import '../foundation/variables.scss';
+
 .header {
+  box-sizing: border-box;
+  height: $header-height;
   padding: 20px;
   text-align: center;
   border-bottom: solid 1px #ccc;

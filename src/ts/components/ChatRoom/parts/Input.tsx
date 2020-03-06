@@ -1,11 +1,10 @@
 import * as React from 'react';
-import { StoreState } from '~/ts/store';
 
 type Props = {
-  chatRoom: StoreState['chatRoom'];
+  emitMessage: (message: string) => void;
 };
 
-const Input: React.FC<Props> = ({ chatRoom }) => {
+const Input: React.FC<Props> = React.memo(({ emitMessage }) => {
   const input = React.useRef<HTMLInputElement>(null);
 
   const onSubmit = (event: React.FormEvent) => {
@@ -15,10 +14,8 @@ const Input: React.FC<Props> = ({ chatRoom }) => {
       const value = input.current.value;
 
       if (value !== '') {
-        if (chatRoom.socket) {
-          chatRoom.socket.emit('message', value);
-          input.current.value = '';
-        }
+        emitMessage(value);
+        input.current.value = '';
       }
     }
   };
@@ -28,6 +25,6 @@ const Input: React.FC<Props> = ({ chatRoom }) => {
       <input type="text" ref={input} placeholder="メッセージ" />
     </form>
   );
-};
+});
 
 export default Input;

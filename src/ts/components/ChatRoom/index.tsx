@@ -1,36 +1,56 @@
 import * as React from 'react';
-import { StoreState } from '~/ts/store';
+import { useSelector, useDispatch } from 'react-redux';
 import io from 'socket.io-client';
+import { StoreState } from '~/ts/store';
+import { Message, addMessages, clearMessages } from '~/ts/modules/ChatRoom';
 
 import Input from './parts/Input';
+import MessageList from './parts/MessageList';
 
 type Props = {
-  chatRoom: StoreState['chatRoom'];
-  setSocket: (payload: SocketIOClient.Socket) => void;
   roomId: string;
 };
 
-const ChatRoom: React.FC<Props> = ({ chatRoom, setSocket, roomId }) => {
+const ChatRoom: React.FC<Props> = ({ roomId }) => {
   const socket = React.useRef<SocketIOClient.Socket>(io());
+  const messages = useSelector<StoreState, Message[]>(state => state.chatRoom.messages);
+  const dispatch = useDispatch();
+
+  const emitMessage = React.useCallback(
+    (message: string, isBroadcast = false) => {
+      socket.current.emit(isBroadcast ? 'messageBroadcast' : 'message', message);
+    },
+    [socket]
+  );
+
+  const addMessage = (message: string) => {
+    dispatch(
+      addMessages([
+        {
+          name: 'test',
+          message,
+          date: '2020-03-06 11:10:00'
+        }
+      ])
+    );
+  };
 
   React.useEffect(() => {
-    setSocket(socket.current);
-
-    socket.current.on('message', (message: string) => {
-      console.log(message);
-    });
+    socket.current.on('message', addMessage);
     socket.current.emit('join', roomId);
-    socket.current.emit('message', '入室しました。');
+    emitMessage('入室しました。');
 
     return () => {
-      socket.current.emit('message', '退室しました。');
+      emitMessage('退室しました。', true);
       socket.current.emit('leave', roomId);
+      dispatch(clearMessages());
     };
   }, []);
 
   return (
     <>
-      <Input chatRoom={chatRoom} />
+      <MessageList messages={messages} />
+      <Input emitMessage={emitMessage} />
     </>
   );
 };

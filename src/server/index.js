@@ -48,17 +48,21 @@ io.on('connection', socket => {
   let room = null;
 
   // 入室
-  socket.on('join', payload => {
-    room = payload;
+  socket.on('join', roomId => {
+    room = roomId;
     socket.join(room);
   });
   // 退室
-  socket.on('leave', payload => {
-    socket.leave(payload);
+  socket.on('leave', roomId => {
+    socket.leave(roomId);
   });
   // チャット受信+送信
-  socket.on('message', payload => {
-    if (room) io.to(room).emit('message', payload);
+  socket.on('message', message => {
+    if (room) io.to(room).emit('message', message);
+  });
+  // ブロードキャストチャット
+  socket.on('messageBroadcast', message => {
+    if (room) socket.broadcast.to(room).emit('message', message);
   });
 });
 

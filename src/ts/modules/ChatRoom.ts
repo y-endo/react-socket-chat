@@ -1,8 +1,14 @@
 import { reducerWithInitialState } from 'typescript-fsa-reducers';
 import { actionCreatorFactory } from 'typescript-fsa';
 
+export interface Message {
+  name: string;
+  message: string;
+  date: string;
+}
+
 export interface ChatRoomState {
-  socket: SocketIOClient.Socket | null;
+  messages: Message[];
 }
 
 const actionCreator = actionCreatorFactory();
@@ -10,25 +16,31 @@ const actionCreator = actionCreatorFactory();
 /**
  * ActionType
  */
-const SET_SOCKET = 'SET_SOCKET';
+const ADD_MESSAGES = 'ADD_MESSAGES';
+const CLEAN_MESSAGES = 'CLEAN_MESSAGES';
 
 /**
  * Actions
  */
-export const setSocket = actionCreator<ChatRoomState['socket']>(SET_SOCKET);
+export const addMessages = actionCreator<ChatRoomState['messages']>(ADD_MESSAGES);
+export const clearMessages = actionCreator(CLEAN_MESSAGES);
 
 /**
  * State
  */
 const initialState: ChatRoomState = {
-  socket: null
+  messages: []
 };
 
 /**
  * Reducer
  */
-const reducer = reducerWithInitialState(initialState).case(setSocket, (state, payload) => {
-  return { ...state, socket: payload };
-});
+const reducer = reducerWithInitialState(initialState)
+  .case(addMessages, (state, payload) => {
+    return { ...state, messages: state.messages.concat(payload) };
+  })
+  .case(clearMessages, state => {
+    return { ...state, messages: [] };
+  });
 
 export default reducer;

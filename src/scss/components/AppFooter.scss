@@ -1,6 +1,10 @@
 @charset "UTF-8";
 
+@import '../foundation/variables.scss';
+
 .footer {
+  box-sizing: border-box;
+  height: $footer-height;
   padding: 20px;
   text-align: center;
   border-top: solid 1px #ccc;
