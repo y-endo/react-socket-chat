@@ -14,6 +14,8 @@ type Props = {
 const ChatRoom: React.FC<Props> = ({ roomId }) => {
   const socket = React.useRef<SocketIOClient.Socket>(io());
   const messages = useSelector<StoreState, Message[]>(state => state.chatRoom.messages);
+  const sessionId = useSelector<StoreState, string>(state => state.app.sessionId);
+  const userName = useSelector<StoreState, string>(state => state.app.userName);
   const dispatch = useDispatch();
 
   const emitMessage = React.useCallback(
@@ -38,7 +40,7 @@ const ChatRoom: React.FC<Props> = ({ roomId }) => {
   React.useEffect(() => {
     socket.current.on('message', addMessage);
     socket.current.emit('join', roomId);
-    emitMessage('入室しました。');
+    emitMessage(`${userName}が入室しました。`);
 
     return () => {
       emitMessage('退室しました。', true);

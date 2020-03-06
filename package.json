@@ -59,6 +59,7 @@
     "redux-logger": "^3.0.6",
     "socket.io": "^2.3.0",
     "typescript-fsa": "^3.0.0",
-    "typescript-fsa-reducers": "^1.2.1"
+    "typescript-fsa-reducers": "^1.2.1",
+    "whatwg-fetch": "^3.0.0"
   }
 }

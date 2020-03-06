@@ -2,12 +2,15 @@ import { createStore, applyMiddleware, combineReducers } from 'redux';
 import { createLogger } from 'redux-logger';
 
 import chatRoomReducer, { ChatRoomState } from '~/ts/modules/ChatRoom';
+import appReducer, { AppState } from '~/ts/modules/App';
 
 export interface StoreState {
+  app: AppState;
   chatRoom: ChatRoomState;
 }
 
 const reducers = combineReducers({
+  app: appReducer,
   chatRoom: chatRoomReducer
 });
 

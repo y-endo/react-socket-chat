@@ -8,11 +8,8 @@ const path = require('path');
 const uuid = require('node-uuid');
 const fs = require('fs');
 
-app.use(
-  bodyParser.urlencoded({
-    extended: false
-  })
-);
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json());
 app.use(
   session({
     secret: 'secret',
@@ -32,6 +29,12 @@ app.post('/login', (req, res) => {
   }
 
   res.redirect('/');
+});
+
+app.post('/validate_session', (req, res) => {
+  res.json({
+    result: req.body.sessionId === req.session.sessionId && req.body.userName === req.session.userName
+  });
 });
 
 app.get('*', (req, res) => {
