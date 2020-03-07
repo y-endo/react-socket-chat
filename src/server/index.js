@@ -31,6 +31,13 @@ app.post('/login', (req, res) => {
   res.redirect('/');
 });
 
+app.get('/logout', (req, res) => {
+  req.session.sessionId = null;
+  req.session.userName = null;
+
+  res.redirect('/login');
+});
+
 app.post('/validate_session', (req, res) => {
   res.json({
     result: req.body.sessionId === req.session.sessionId && req.body.userName === req.session.userName

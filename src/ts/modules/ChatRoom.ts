@@ -16,13 +16,13 @@ export interface ChatRoomState {
  * ActionType
  */
 const ADD_MESSAGES = 'ADD_MESSAGES';
-const CLEAN_MESSAGES = 'CLEAN_MESSAGES';
+const CLEAR_MESSAGES = 'CLEAR_MESSAGES';
 
 /**
  * Actions
  */
 export const addMessages = actionCreator<ChatRoomState['messages']>(ADD_MESSAGES);
-export const clearMessages = actionCreator(CLEAN_MESSAGES);
+export const clearMessages = actionCreator(CLEAR_MESSAGES);
 
 /**
  * State

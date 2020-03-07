@@ -1,13 +1,14 @@
 import * as React from 'react';
-import { Redirect } from 'react-router-dom';
-import { useSelector } from 'react-redux';
-import { StoreState } from '~/ts/store';
 import Layout from '~/ts/layouts/default';
 import LoginForm from '~/ts/components/LoginForm';
 
 const Login: React.FC = () => {
-  const isLogin = useSelector<StoreState, StoreState['app']['isLogin']>(state => state.app.isLogin);
-  const content = isLogin ? <Redirect to="/" /> : <LoginForm />;
+  // sessionId, userNameが残ってたらログアウト処理を挟む
+  if (window.app.sessionId || window.app.userName) {
+    location.assign('/logout');
+  }
+
+  const content = <LoginForm />;
 
   return <Layout content={content} />;
 };

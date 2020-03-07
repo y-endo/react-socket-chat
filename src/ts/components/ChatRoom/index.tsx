@@ -2,7 +2,7 @@ import * as React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import io from 'socket.io-client';
 import { StoreState } from '~/ts/store';
-import { Message, addMessages, clearMessages } from '~/ts/modules/ChatRoom';
+import { addMessages, clearMessages } from '~/ts/modules/ChatRoom';
 
 import Input from './parts/Input';
 import MessageList from './parts/MessageList';
@@ -13,7 +13,7 @@ type Props = {
 
 const ChatRoom: React.FC<Props> = ({ roomId }) => {
   const socket = React.useRef<SocketIOClient.Socket>(io());
-  const messages = useSelector<StoreState, Message[]>(state => state.chatRoom.messages);
+  const messages = useSelector<StoreState, StoreState['chatRoom']['messages']>(state => state.chatRoom.messages);
   const sessionId = useSelector<StoreState, StoreState['app']['sessionId']>(state => state.app.sessionId);
   const userName = useSelector<StoreState, StoreState['app']['userName']>(state => state.app.userName);
   const dispatch = useDispatch();

@@ -6,11 +6,12 @@ import { StoreState } from '~/ts/store';
 import validateSessionId from '~/ts/utils/validateSessionId';
 
 const Auth: React.FC = ({ children }) => {
+  const [isValidating, setIsValidating] = React.useState(true);
   const isLogin = useSelector<StoreState, StoreState['app']['isLogin']>(state => state.app.isLogin);
   const dispatch = useDispatch();
 
   React.useEffect(() => {
-    if (window.app.sessionId && window.app.userName && !isLogin) {
+    if (window.app.sessionId !== null && window.app.userName !== null) {
       // sessionIdとuserNameが正当なものか確認
       validateSessionId({
         sessionId: window.app.sessionId,
@@ -26,9 +27,17 @@ const Auth: React.FC = ({ children }) => {
           } else {
             dispatch(setIsLogin(false));
           }
+
+          setIsValidating(false);
         });
+    } else {
+      setIsValidating(false);
     }
   }, [window.app.sessionId, window.app.userName]);
+
+  if (isValidating) {
+    return <></>;
+  }
 
   if (isLogin) {
     return <>{children}</>;
