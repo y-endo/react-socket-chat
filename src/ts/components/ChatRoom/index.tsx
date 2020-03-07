@@ -14,8 +14,8 @@ type Props = {
 const ChatRoom: React.FC<Props> = ({ roomId }) => {
   const socket = React.useRef<SocketIOClient.Socket>(io());
   const messages = useSelector<StoreState, Message[]>(state => state.chatRoom.messages);
-  const sessionId = useSelector<StoreState, string>(state => state.app.sessionId);
-  const userName = useSelector<StoreState, string>(state => state.app.userName);
+  const sessionId = useSelector<StoreState, StoreState['app']['sessionId']>(state => state.app.sessionId);
+  const userName = useSelector<StoreState, StoreState['app']['userName']>(state => state.app.userName);
   const dispatch = useDispatch();
 
   const emitMessage = React.useCallback(
