@@ -31,7 +31,7 @@ const ChatRoom: React.FC<Props> = ({ roomId }) => {
         {
           name: 'test',
           message,
-          date: '2020-03-06 11:10:00'
+          postedAt: '2020-10-10 10:10:10'
         }
       ])
     );

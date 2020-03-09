@@ -1,0 +1,23 @@
+type Message {
+  id: Int!
+  name: String!
+  text: String!
+  postedAt: String!
+}
+
+type Room {
+  id: Int!
+  name: String!
+  count: Int!
+  createdAt: String!
+}
+
+type Query {
+  messages: [Message]
+  rooms: [Room]
+}
+
+type Mutation {
+  addMessage(name: String!, text: String!): Boolean
+  addRoom(name: String!): Boolean
+}

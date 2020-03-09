@@ -2,15 +2,15 @@ import { reducerWithInitialState } from 'typescript-fsa-reducers';
 import { actionCreatorFactory } from 'typescript-fsa';
 const actionCreator = actionCreatorFactory();
 
-export interface Message {
+export type Message = {
   name: string;
   message: string;
-  date: string;
-}
+  postedAt: string;
+};
 
-export interface ChatRoomState {
+export type ChatRoomState = {
   messages: Message[];
-}
+};
 
 /**
  * ActionType

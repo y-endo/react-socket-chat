@@ -4,10 +4,10 @@ import { createLogger } from 'redux-logger';
 import chatRoomReducer, { ChatRoomState } from '~/ts/modules/ChatRoom';
 import appReducer, { AppState } from '~/ts/modules/App';
 
-export interface StoreState {
+export type StoreState = {
   app: AppState;
   chatRoom: ChatRoomState;
-}
+};
 
 const reducers = combineReducers({
   app: appReducer,

@@ -7,6 +7,9 @@ const session = require('express-session');
 const path = require('path');
 const uuid = require('node-uuid');
 const fs = require('fs');
+const apolloServer = require('./graphql');
+
+apolloServer.applyMiddleware({ app });
 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
@@ -77,5 +80,6 @@ io.on('connection', socket => {
 });
 
 httpServer.listen(3030, () => {
-  console.log('server port:3030');
+  console.log('http-server ready at http://localhost:3030');
+  console.log(`🚀 Server ready at http://localhost:3030${apolloServer.graphqlPath}`);
 });

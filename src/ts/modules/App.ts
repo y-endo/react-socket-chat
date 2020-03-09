@@ -2,11 +2,11 @@ import { reducerWithInitialState } from 'typescript-fsa-reducers';
 import { actionCreatorFactory } from 'typescript-fsa';
 const actionCreator = actionCreatorFactory();
 
-export interface AppState {
+export type AppState = {
   isLogin: boolean;
   sessionId: string;
   userName: string;
-}
+};
 
 /**
  * ActionType

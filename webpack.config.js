@@ -32,6 +32,11 @@ module.exports = {
           },
           'sass-loader'
         ]
+      },
+      {
+        test: /\.graphql$/,
+        exclude: /node_modules/,
+        loader: 'graphql-tag/loader'
       }
     ]
   },
