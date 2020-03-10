@@ -1,0 +1,5 @@
+@charset "UTF-8";
+
+@function z($name) {
+  @return index($z-index, $name);
+}

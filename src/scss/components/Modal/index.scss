@@ -1,0 +1,41 @@
+@charset "UTF-8";
+
+@import '../../foundation/variables.scss';
+@import '../../foundation/functions.scss';
+
+.modal {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: z(modal);
+  background: rgba(#000, 0.5);
+
+  &__inner {
+    width: 800px;
+    padding: 30px;
+    box-sizing: border-box;
+    background: #fff;
+  }
+}
+
+.fade-enter {
+  opacity: 0;
+}
+.fade-enter-active,
+.fade-enter-done {
+  transition: opacity 0.5s ease-in-out;
+  opacity: 1;
+}
+.fade-exit {
+  opacity: 1;
+}
+.fade-exit-active,
+.fade-exit-done {
+  transition: opacity 0.5s ease-in-out;
+  opacity: 0;
+}

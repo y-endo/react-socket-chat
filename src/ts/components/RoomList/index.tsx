@@ -1,17 +1,19 @@
 import * as React from 'react';
 import { Link } from 'react-router-dom';
+import { Room } from '~/graphql/schema';
 
-const RoomList: React.FC = () => {
-  const list = [];
-  for (let i = 1; i <= 10; i++) {
-    list.push(
-      <li key={`room_${i}`}>
-        <Link to={`/room/${i}`}>{`RoomName ${i}`}</Link>
-      </li>
-    );
-  }
+import Item from './parts/Item';
 
-  return <ul>{list}</ul>;
+type Props = {
+  rooms: Room[];
+};
+
+const RoomList: React.FC<Props> = ({ rooms }) => {
+  const items = rooms.map(room => {
+    return <Item key={room.id} data={room} />;
+  });
+
+  return <ul>{items}</ul>;
 };
 
 export default RoomList;

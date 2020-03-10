@@ -1,5 +1,5 @@
 import * as React from 'react';
-import css from '~/scss/components/LoginForm.scss';
+import css from '~/scss/components/LoginForm/index.scss';
 
 const LoginForm: React.FC = () => {
   return (

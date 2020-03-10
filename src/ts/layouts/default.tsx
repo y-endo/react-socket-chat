@@ -1,8 +1,8 @@
 import * as React from 'react';
 
-import AppHeader from '~/ts/components/common/AppHeader';
-import AppFooter from '~/ts/components/common/AppFooter';
-import MainContent from '~/ts/components/common/MainContent';
+import AppHeader from '~/ts/components/App/AppHeader';
+import AppFooter from '~/ts/components/App/AppFooter';
+import MainContent from '~/ts/components/MainContent';
 
 type Props = {
   content: JSX.Element;
