@@ -19,5 +19,5 @@ type Query {
 
 type Mutation {
   addMessage(name: String!, text: String!): Boolean
-  addRoom(name: String!): Boolean
+  addRoom(id: Int!, name: String!, count: Int!, createdAt: String!): Room
 }

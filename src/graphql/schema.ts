@@ -19,7 +19,7 @@ export interface Message {
 
 export interface Mutation {
   addMessage?: Maybe<Scalars['Boolean']>,
-  addRoom?: Maybe<Scalars['Boolean']>,
+  addRoom?: Maybe<Room>,
 }
 
 
@@ -30,7 +30,10 @@ export interface MutationAddMessageArgs {
 
 
 export interface MutationAddRoomArgs {
-  name: Scalars['String']
+  id: Scalars['Int'],
+  name: Scalars['String'],
+  count: Scalars['Int'],
+  createdAt: Scalars['String']
 }
 
 export interface Query {
@@ -54,11 +57,14 @@ export type AddMessageMutationVariables = {
 export type AddMessageMutation = Pick<Mutation, 'addMessage'>;
 
 export type AddRoomMutationVariables = {
-  name: Scalars['String']
+  id: Scalars['Int'],
+  name: Scalars['String'],
+  count: Scalars['Int'],
+  createdAt: Scalars['String']
 };
 
 
-export type AddRoomMutation = Pick<Mutation, 'addRoom'>;
+export type AddRoomMutation = { addRoom: Maybe<Pick<Room, 'id' | 'name' | 'count' | 'createdAt'>> };
 
 export type MessagesQueryVariables = {};
 
@@ -173,7 +179,7 @@ export type MessageResolvers<ContextType = any, ParentType extends ResolversPare
 
 export type MutationResolvers<ContextType = any, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = {
   addMessage?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationAddMessageArgs, 'name' | 'text'>>,
-  addRoom?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationAddRoomArgs, 'name'>>,
+  addRoom?: Resolver<Maybe<ResolversTypes['Room']>, ParentType, ContextType, RequireFields<MutationAddRoomArgs, 'id' | 'name' | 'count' | 'createdAt'>>,
 };
 
 export type QueryResolvers<ContextType = any, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = {
