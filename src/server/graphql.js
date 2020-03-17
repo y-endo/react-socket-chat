@@ -21,7 +21,7 @@ const RoomModel = mongoose.model(
   'Room',
   new mongoose.Schema(
     {
-      id: Number,
+      id: String,
       name: String,
       count: Number,
       createdAt: String
@@ -37,15 +37,10 @@ const typeDefs = gql`
 `;
 const resolvers = {
   Query: {
-    rooms: () => {
-      return [
-        {
-          id: 1,
-          name: 'room1',
-          count: 0,
-          createdAt: '2020-03-09 10:00:00'
-        }
-      ];
+    async rooms() {
+      const rooms = await RoomModel.find();
+
+      return rooms;
     }
   },
   Mutation: {

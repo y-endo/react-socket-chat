@@ -30,7 +30,7 @@ export interface MutationAddMessageArgs {
 
 
 export interface MutationAddRoomArgs {
-  id: Scalars['Int'],
+  id: Scalars['String'],
   name: Scalars['String'],
   count: Scalars['Int'],
   createdAt: Scalars['String']
@@ -42,7 +42,7 @@ export interface Query {
 }
 
 export interface Room {
-  id: Scalars['Int'],
+  id: Scalars['String'],
   name: Scalars['String'],
   count: Scalars['Int'],
   createdAt: Scalars['String'],
@@ -57,7 +57,7 @@ export type AddMessageMutationVariables = {
 export type AddMessageMutation = Pick<Mutation, 'addMessage'>;
 
 export type AddRoomMutationVariables = {
-  id: Scalars['Int'],
+  id: Scalars['String'],
   name: Scalars['String'],
   count: Scalars['Int'],
   createdAt: Scalars['String']
@@ -188,7 +188,7 @@ export type QueryResolvers<ContextType = any, ParentType extends ResolversParent
 };
 
 export type RoomResolvers<ContextType = any, ParentType extends ResolversParentTypes['Room'] = ResolversParentTypes['Room']> = {
-  id?: Resolver<ResolversTypes['Int'], ParentType, ContextType>,
+  id?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
   name?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
   count?: Resolver<ResolversTypes['Int'], ParentType, ContextType>,
   createdAt?: Resolver<ResolversTypes['String'], ParentType, ContextType>,

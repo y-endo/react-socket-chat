@@ -6,6 +6,7 @@ import queryRooms from '~/graphql/queries/rooms.graphql';
 import Layout from '~/ts/layouts/default';
 import RoomList from '~/ts/components/RoomList';
 import Modal from '~/ts/components/Modal';
+import CreateRoomForm from '~/ts/components/CreateRoomForm';
 
 const Index: React.FC = () => {
   const [isModalOpen, setIsModalOpen] = React.useState(false);
@@ -44,7 +45,7 @@ const Index: React.FC = () => {
             ({ item, key, props }) =>
               item && (
                 <animated.div style={props} key={key}>
-                  <Modal closeModal={closeModal} />
+                  <Modal content={<CreateRoomForm />} closeModal={closeModal} />
                 </animated.div>
               )
           )}
