@@ -4,7 +4,11 @@ import { useMutation } from '@apollo/react-hooks';
 import uuid from 'node-uuid';
 import mutationAddRoom from '~/graphql/mutations/addRoom.graphql';
 
-const CreateReactForm: React.FC = () => {
+type Props = {
+  emitRoom: () => void;
+};
+
+const CreateReactForm: React.FC<Props> = React.memo(({ emitRoom }) => {
   const input = React.useRef<HTMLInputElement>(null);
   const [addRoom] = useMutation(gql`
     ${mutationAddRoom}
@@ -18,11 +22,11 @@ const CreateReactForm: React.FC = () => {
         id: uuid.v4(),
         name: input.current!.value,
         count: 0,
-        createdAt: new Date()
+        createdAt: String(new Date())
       }
     });
 
-    alert('チャットルームを作成しました。');
+    emitRoom();
   };
 
   return (
@@ -31,6 +35,6 @@ const CreateReactForm: React.FC = () => {
       <button>作成</button>
     </form>
   );
-};
+});
 
 export default CreateReactForm;

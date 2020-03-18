@@ -58,7 +58,13 @@ app.get('*', (req, res) => {
 });
 
 io.on('connection', socket => {
+  console.log('connection');
   let room = null;
+
+  // チャットルーム作成
+  socket.on('addRoom', () => {
+    socket.emit('addRoom');
+  });
 
   // 入室
   socket.on('join', roomId => {
@@ -71,7 +77,7 @@ io.on('connection', socket => {
   });
   // チャット受信+送信
   socket.on('message', message => {
-    if (room) io.to(room).emit('message', message);
+    if (room) socket.to(room).emit('message', message);
   });
   // ブロードキャストチャット
   socket.on('messageBroadcast', message => {

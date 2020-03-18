@@ -1,6 +1,5 @@
 import * as React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import io from 'socket.io-client';
 import { StoreState } from '~/ts/store';
 import { addMessages, clearMessages } from '~/ts/modules/ChatRoom';
 
@@ -12,15 +11,15 @@ type Props = {
 };
 
 const ChatRoom: React.FC<Props> = ({ roomId }) => {
-  const socket = React.useRef<SocketIOClient.Socket>(io());
   const messages = useSelector<StoreState, StoreState['chatRoom']['messages']>(state => state.chatRoom.messages);
+  const socket = useSelector<StoreState, StoreState['app']['socket']>(state => state.app.socket);
   const sessionId = useSelector<StoreState, StoreState['app']['sessionId']>(state => state.app.sessionId);
   const userName = useSelector<StoreState, StoreState['app']['userName']>(state => state.app.userName);
   const dispatch = useDispatch();
 
   const emitMessage = React.useCallback(
     (message: string, isBroadcast = false) => {
-      socket.current.emit(isBroadcast ? 'messageBroadcast' : 'message', message);
+      if (socket) socket.emit(isBroadcast ? 'messageBroadcast' : 'message', message);
     },
     [socket]
   );
@@ -38,13 +37,13 @@ const ChatRoom: React.FC<Props> = ({ roomId }) => {
   };
 
   React.useEffect(() => {
-    socket.current.on('message', addMessage);
-    socket.current.emit('join', roomId);
+    if (socket) socket.on('message', addMessage);
+    if (socket) socket.emit('join', roomId);
     emitMessage(`${userName}が入室しました。`);
 
     return () => {
       emitMessage('退室しました。', true);
-      socket.current.emit('leave', roomId);
+      if (socket) socket.emit('leave', roomId);
       dispatch(clearMessages());
     };
   }, []);
