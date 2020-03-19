@@ -37,13 +37,18 @@ const ChatRoom: React.FC<Props> = ({ roomId }) => {
   };
 
   React.useEffect(() => {
-    if (socket) socket.on('message', addMessage);
-    if (socket) socket.emit('join', roomId);
+    if (socket) {
+      socket.on('message', addMessage);
+      socket.emit('join', roomId);
+    }
     emitMessage(`${userName}が入室しました。`);
 
     return () => {
       emitMessage('退室しました。', true);
-      if (socket) socket.emit('leave', roomId);
+      if (socket) {
+        socket.emit('leave', roomId);
+        socket.off('message');
+      }
       dispatch(clearMessages());
     };
   }, []);
