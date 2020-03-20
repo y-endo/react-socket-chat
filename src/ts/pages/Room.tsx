@@ -8,7 +8,6 @@ type Props = {} & RouteComponentProps<{ id: string }>;
 const Room: React.FC<Props> = ({ match }) => {
   const content = (
     <div>
-      <h1>Room {match.params.id}</h1>
       <ChatRoom roomId={match.params.id} />
     </div>
   );

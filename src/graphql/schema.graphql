@@ -15,6 +15,7 @@ type Room {
 type Query {
   messages: [Message]
   rooms: [Room]
+  room(id: String!): Room
 }
 
 type Mutation {

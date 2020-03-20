@@ -39,6 +39,12 @@ export interface MutationAddRoomArgs {
 export interface Query {
   messages?: Maybe<Array<Maybe<Message>>>,
   rooms?: Maybe<Array<Maybe<Room>>>,
+  room?: Maybe<Room>,
+}
+
+
+export interface QueryRoomArgs {
+  id: Scalars['String']
 }
 
 export interface Room {
@@ -70,6 +76,13 @@ export type MessagesQueryVariables = {};
 
 
 export type MessagesQuery = { messages: Maybe<Array<Maybe<Pick<Message, 'name' | 'text' | 'postedAt'>>>> };
+
+export type RoomQueryVariables = {
+  id: Scalars['String']
+};
+
+
+export type RoomQuery = { room: Maybe<Pick<Room, 'id' | 'name' | 'count' | 'createdAt'>> };
 
 export type RoomsQueryVariables = {};
 
@@ -185,6 +198,7 @@ export type MutationResolvers<ContextType = any, ParentType extends ResolversPar
 export type QueryResolvers<ContextType = any, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = {
   messages?: Resolver<Maybe<Array<Maybe<ResolversTypes['Message']>>>, ParentType, ContextType>,
   rooms?: Resolver<Maybe<Array<Maybe<ResolversTypes['Room']>>>, ParentType, ContextType>,
+  room?: Resolver<Maybe<ResolversTypes['Room']>, ParentType, ContextType, RequireFields<QueryRoomArgs, 'id'>>,
 };
 
 export type RoomResolvers<ContextType = any, ParentType extends ResolversParentTypes['Room'] = ResolversParentTypes['Room']> = {

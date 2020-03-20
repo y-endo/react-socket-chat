@@ -41,6 +41,11 @@ const resolvers = {
       const rooms = await RoomModel.find();
 
       return rooms;
+    },
+    async room(_, args) {
+      const room = await RoomModel.findOne({ id: args.id });
+
+      return room;
     }
   },
   Mutation: {

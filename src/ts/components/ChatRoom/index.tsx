@@ -1,5 +1,8 @@
 import * as React from 'react';
+import gql from 'graphql-tag';
 import { useSelector, useDispatch } from 'react-redux';
+import { useQuery } from '@apollo/react-hooks';
+import queryRoom from '~/graphql/queries/room.graphql';
 import { StoreState } from '~/ts/store';
 import { addMessages, clearMessages } from '~/ts/modules/ChatRoom';
 
@@ -16,6 +19,14 @@ const ChatRoom: React.FC<Props> = ({ roomId }) => {
   const sessionId = useSelector<StoreState, StoreState['app']['sessionId']>(state => state.app.sessionId);
   const userName = useSelector<StoreState, StoreState['app']['userName']>(state => state.app.userName);
   const dispatch = useDispatch();
+  const { data } = useQuery(
+    gql`
+      ${queryRoom}
+    `,
+    {
+      variables: { id: roomId }
+    }
+  );
 
   const emitMessage = React.useCallback(
     (message: string, isBroadcast = false) => {
@@ -55,6 +66,7 @@ const ChatRoom: React.FC<Props> = ({ roomId }) => {
 
   return (
     <>
+      {data && <h1>{data.room.name}</h1>}
       <MessageList messages={messages} />
       <Input emitMessage={emitMessage} />
     </>
