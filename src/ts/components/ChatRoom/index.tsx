@@ -16,7 +16,7 @@ type Props = {
 const ChatRoom: React.FC<Props> = ({ roomId }) => {
   const messages = useSelector<StoreState, StoreState['chatRoom']['messages']>(state => state.chatRoom.messages);
   const socket = useSelector<StoreState, StoreState['app']['socket']>(state => state.app.socket);
-  const sessionId = useSelector<StoreState, StoreState['app']['sessionId']>(state => state.app.sessionId);
+  // const sessionId = useSelector<StoreState, StoreState['app']['sessionId']>(state => state.app.sessionId);
   const userName = useSelector<StoreState, StoreState['app']['userName']>(state => state.app.userName);
   const dispatch = useDispatch();
   const { data } = useQuery(
@@ -30,7 +30,7 @@ const ChatRoom: React.FC<Props> = ({ roomId }) => {
 
   const emitMessage = React.useCallback(
     (message: string, isBroadcast = false) => {
-      if (socket) socket.emit(isBroadcast ? 'messageBroadcast' : 'message', message);
+      if (socket) socket.emit(isBroadcast ? 'addMessageBroadcast' : 'addMessage', message);
     },
     [socket]
   );
@@ -49,7 +49,7 @@ const ChatRoom: React.FC<Props> = ({ roomId }) => {
 
   React.useEffect(() => {
     if (socket) {
-      socket.on('message', addMessage);
+      socket.on('addMessage', addMessage);
       socket.emit('join', roomId);
     }
     emitMessage(`${userName}が入室しました。`);
@@ -58,7 +58,7 @@ const ChatRoom: React.FC<Props> = ({ roomId }) => {
       emitMessage('退室しました。', true);
       if (socket) {
         socket.emit('leave', roomId);
-        socket.off('message');
+        socket.off('addMessage');
       }
       dispatch(clearMessages());
     };

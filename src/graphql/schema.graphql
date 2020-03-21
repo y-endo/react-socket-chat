@@ -1,5 +1,4 @@
 type Message {
-  id: Int!
   name: String!
   text: String!
   postedAt: String!
@@ -9,16 +8,15 @@ type Room {
   id: String!
   name: String!
   count: Int!
+  messages: [Message]!
   createdAt: String!
 }
 
 type Query {
-  messages: [Message]
   rooms: [Room]
   room(id: String!): Room
 }
 
 type Mutation {
-  addMessage(name: String!, text: String!): Boolean
-  addRoom(id: String!, name: String!, count: Int!, createdAt: String!): Room
+  addRoom(name: String!): Room
 }

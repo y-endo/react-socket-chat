@@ -1,32 +1,31 @@
 import * as React from 'react';
 import gql from 'graphql-tag';
 import { useMutation } from '@apollo/react-hooks';
-import uuid from 'node-uuid';
 import mutationAddRoom from '~/graphql/mutations/addRoom.graphql';
+import { AddRoomMutation, AddRoomMutationVariables } from '~/graphql/schema';
 
 type Props = {
-  emitRoom: () => void;
+  addRoomComplete: (roomId: string) => void;
 };
 
-const CreateReactForm: React.FC<Props> = React.memo(({ emitRoom }) => {
+const CreateReactForm: React.FC<Props> = React.memo(({ addRoomComplete }) => {
   const input = React.useRef<HTMLInputElement>(null);
-  const [addRoom] = useMutation(gql`
+  const [addRoom] = useMutation<AddRoomMutation, AddRoomMutationVariables>(gql`
     ${mutationAddRoom}
   `);
 
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
 
-    await addRoom({
+    const { data } = await addRoom({
       variables: {
-        id: uuid.v4(),
-        name: input.current!.value,
-        count: 0,
-        createdAt: String(new Date())
+        name: input.current!.value
       }
     });
 
-    emitRoom();
+    if (data && data.addRoom) {
+      addRoomComplete(data.addRoom.id);
+    }
   };
 
   return (

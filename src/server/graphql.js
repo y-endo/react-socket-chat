@@ -2,6 +2,7 @@ const fs = require('fs');
 const path = require('path');
 const mongoose = require('mongoose');
 const { ApolloServer, gql } = require('apollo-server-express');
+const uuid = require('node-uuid');
 
 const schema = fs.readFileSync(path.resolve(__dirname, '../graphql/schema.graphql'), 'utf-8').toString();
 
@@ -24,6 +25,13 @@ const RoomModel = mongoose.model(
       id: String,
       name: String,
       count: Number,
+      messages: [
+        {
+          name: String,
+          text: String,
+          postedAt: String
+        }
+      ],
       createdAt: String
     },
     {
@@ -50,7 +58,7 @@ const resolvers = {
   },
   Mutation: {
     async addRoom(_, args) {
-      const room = new RoomModel(args);
+      const room = new RoomModel({ id: uuid.v4(), name: args.name, count: 1, messages: [], createdAt: String(new Date()) });
       await room.save();
 
       return room;

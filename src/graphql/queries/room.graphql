@@ -3,6 +3,11 @@ query room($id: String!) {
     id
     name
     count
+    messages {
+      name
+      text
+      postedAt
+    }
     createdAt
   }
 }

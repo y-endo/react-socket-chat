@@ -75,12 +75,12 @@ io.on('connection', socket => {
     socket.leave(roomId);
   });
   // チャット受信+送信
-  socket.on('message', message => {
-    if (room) io.to(room).emit('message', message);
+  socket.on('addMessage', message => {
+    if (room) io.to(room).emit('addMessage', message);
   });
   // ブロードキャストチャット
-  socket.on('messageBroadcast', message => {
-    if (room) socket.broadcast.to(room).emit('message', message);
+  socket.on('addMessageBroadcast', message => {
+    if (room) socket.broadcast.to(room).emit('addMessage', message);
   });
 });
 

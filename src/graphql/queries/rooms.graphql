@@ -3,6 +3,11 @@ query rooms {
     id
     name
     count
+    messages {
+      name
+      text
+      postedAt
+    }
     createdAt
   }
 }

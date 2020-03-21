@@ -11,33 +11,21 @@ export interface Scalars {
 }
 
 export interface Message {
-  id: Scalars['Int'],
   name: Scalars['String'],
   text: Scalars['String'],
   postedAt: Scalars['String'],
 }
 
 export interface Mutation {
-  addMessage?: Maybe<Scalars['Boolean']>,
   addRoom?: Maybe<Room>,
 }
 
 
-export interface MutationAddMessageArgs {
-  name: Scalars['String'],
-  text: Scalars['String']
-}
-
-
 export interface MutationAddRoomArgs {
-  id: Scalars['String'],
-  name: Scalars['String'],
-  count: Scalars['Int'],
-  createdAt: Scalars['String']
+  name: Scalars['String']
 }
 
 export interface Query {
-  messages?: Maybe<Array<Maybe<Message>>>,
   rooms?: Maybe<Array<Maybe<Room>>>,
   room?: Maybe<Room>,
 }
@@ -51,43 +39,37 @@ export interface Room {
   id: Scalars['String'],
   name: Scalars['String'],
   count: Scalars['Int'],
+  messages: Array<Maybe<Message>>,
   createdAt: Scalars['String'],
 }
 
-export type AddMessageMutationVariables = {
-  name: Scalars['String'],
-  text: Scalars['String']
-};
-
-
-export type AddMessageMutation = Pick<Mutation, 'addMessage'>;
-
 export type AddRoomMutationVariables = {
-  id: Scalars['String'],
-  name: Scalars['String'],
-  count: Scalars['Int'],
-  createdAt: Scalars['String']
+  name: Scalars['String']
 };
 
 
-export type AddRoomMutation = { addRoom: Maybe<Pick<Room, 'id' | 'name' | 'count' | 'createdAt'>> };
-
-export type MessagesQueryVariables = {};
-
-
-export type MessagesQuery = { messages: Maybe<Array<Maybe<Pick<Message, 'name' | 'text' | 'postedAt'>>>> };
+export type AddRoomMutation = { addRoom: Maybe<(
+    Pick<Room, 'id' | 'name' | 'count' | 'createdAt'>
+    & { messages: Array<Maybe<Pick<Message, 'name' | 'text' | 'postedAt'>>> }
+  )> };
 
 export type RoomQueryVariables = {
   id: Scalars['String']
 };
 
 
-export type RoomQuery = { room: Maybe<Pick<Room, 'id' | 'name' | 'count' | 'createdAt'>> };
+export type RoomQuery = { room: Maybe<(
+    Pick<Room, 'id' | 'name' | 'count' | 'createdAt'>
+    & { messages: Array<Maybe<Pick<Message, 'name' | 'text' | 'postedAt'>>> }
+  )> };
 
 export type RoomsQueryVariables = {};
 
 
-export type RoomsQuery = { rooms: Maybe<Array<Maybe<Pick<Room, 'id' | 'name' | 'count' | 'createdAt'>>>> };
+export type RoomsQuery = { rooms: Maybe<Array<Maybe<(
+    Pick<Room, 'id' | 'name' | 'count' | 'createdAt'>
+    & { messages: Array<Maybe<Pick<Message, 'name' | 'text' | 'postedAt'>>> }
+  )>>> };
 
 
 
@@ -163,10 +145,10 @@ export type DirectiveResolverFn<TResult = {}, TParent = {}, TContext = {}, TArgs
 /** Mapping between all available schema types and the resolvers types */
 export type ResolversTypes = {
   Query: ResolverTypeWrapper<{}>,
-  Message: ResolverTypeWrapper<Message>,
-  Int: ResolverTypeWrapper<Scalars['Int']>,
-  String: ResolverTypeWrapper<Scalars['String']>,
   Room: ResolverTypeWrapper<Room>,
+  String: ResolverTypeWrapper<Scalars['String']>,
+  Int: ResolverTypeWrapper<Scalars['Int']>,
+  Message: ResolverTypeWrapper<Message>,
   Mutation: ResolverTypeWrapper<{}>,
   Boolean: ResolverTypeWrapper<Scalars['Boolean']>,
 };
@@ -174,16 +156,15 @@ export type ResolversTypes = {
 /** Mapping between all available schema types and the resolvers parents */
 export type ResolversParentTypes = {
   Query: {},
-  Message: Message,
-  Int: Scalars['Int'],
-  String: Scalars['String'],
   Room: Room,
+  String: Scalars['String'],
+  Int: Scalars['Int'],
+  Message: Message,
   Mutation: {},
   Boolean: Scalars['Boolean'],
 };
 
 export type MessageResolvers<ContextType = any, ParentType extends ResolversParentTypes['Message'] = ResolversParentTypes['Message']> = {
-  id?: Resolver<ResolversTypes['Int'], ParentType, ContextType>,
   name?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
   text?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
   postedAt?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
@@ -191,12 +172,10 @@ export type MessageResolvers<ContextType = any, ParentType extends ResolversPare
 };
 
 export type MutationResolvers<ContextType = any, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = {
-  addMessage?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationAddMessageArgs, 'name' | 'text'>>,
-  addRoom?: Resolver<Maybe<ResolversTypes['Room']>, ParentType, ContextType, RequireFields<MutationAddRoomArgs, 'id' | 'name' | 'count' | 'createdAt'>>,
+  addRoom?: Resolver<Maybe<ResolversTypes['Room']>, ParentType, ContextType, RequireFields<MutationAddRoomArgs, 'name'>>,
 };
 
 export type QueryResolvers<ContextType = any, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = {
-  messages?: Resolver<Maybe<Array<Maybe<ResolversTypes['Message']>>>, ParentType, ContextType>,
   rooms?: Resolver<Maybe<Array<Maybe<ResolversTypes['Room']>>>, ParentType, ContextType>,
   room?: Resolver<Maybe<ResolversTypes['Room']>, ParentType, ContextType, RequireFields<QueryRoomArgs, 'id'>>,
 };
@@ -205,6 +184,7 @@ export type RoomResolvers<ContextType = any, ParentType extends ResolversParentT
   id?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
   name?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
   count?: Resolver<ResolversTypes['Int'], ParentType, ContextType>,
+  messages?: Resolver<Array<Maybe<ResolversTypes['Message']>>, ParentType, ContextType>,
   createdAt?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
   __isTypeOf?: isTypeOfResolverFn<ParentType>,
 };
