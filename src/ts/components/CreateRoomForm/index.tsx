@@ -1,7 +1,7 @@
 import * as React from 'react';
 import gql from 'graphql-tag';
 import { useMutation } from '@apollo/react-hooks';
-import mutationAddRoom from '~/graphql/mutations/addRoom.graphql';
+import mutationAddRoomGQL from '~/graphql/mutations/addRoom.graphql';
 import { AddRoomMutation, AddRoomMutationVariables } from '~/graphql/schema';
 
 type Props = {
@@ -10,14 +10,14 @@ type Props = {
 
 const CreateReactForm: React.FC<Props> = React.memo(({ addRoomComplete }) => {
   const input = React.useRef<HTMLInputElement>(null);
-  const [addRoom] = useMutation<AddRoomMutation, AddRoomMutationVariables>(gql`
-    ${mutationAddRoom}
+  const [mutationAddRoom] = useMutation<AddRoomMutation, AddRoomMutationVariables>(gql`
+    ${mutationAddRoomGQL}
   `);
 
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
 
-    const { data } = await addRoom({
+    const { data } = await mutationAddRoom({
       variables: {
         name: input.current!.value
       }

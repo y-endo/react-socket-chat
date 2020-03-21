@@ -58,10 +58,36 @@ const resolvers = {
   },
   Mutation: {
     async addRoom(_, args) {
-      const room = new RoomModel({ id: uuid.v4(), name: args.name, count: 1, messages: [], createdAt: String(new Date()) });
+      const room = new RoomModel({
+        id: uuid.v4(),
+        name: args.name,
+        count: 1,
+        messages: [],
+        createdAt: String(new Date())
+      });
       await room.save();
 
       return room;
+    },
+    async addMessage(_, args) {
+      const result = await RoomModel.updateOne(
+        { id: args.roomId },
+        {
+          $push: {
+            messages: {
+              name: args.name,
+              text: args.text,
+              postedAt: String(new Date())
+            }
+          }
+        }
+      ).catch(error => {
+        console.log(error);
+        return false;
+      });
+
+      if (result === false) return false;
+      return true;
     }
   }
 };

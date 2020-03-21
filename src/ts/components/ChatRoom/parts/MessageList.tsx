@@ -1,5 +1,6 @@
 import * as React from 'react';
-import { Message } from '~/ts/modules/ChatRoom';
+// import { Message } from '~/ts/modules/ChatRoom';
+import { Message } from '~/graphql/schema';
 
 type Props = {
   messages: Message[];
@@ -7,7 +8,11 @@ type Props = {
 
 const MessageList: React.FC<Props> = React.memo(({ messages }) => {
   const items = messages.map((message, index) => {
-    return <li key={`message_${index}`}>{message.message}</li>;
+    return (
+      <li key={`message_${index}`}>
+        {message.name}:{message.text}
+      </li>
+    );
   });
 
   return <ul>{items}</ul>;

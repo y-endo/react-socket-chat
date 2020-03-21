@@ -18,5 +18,6 @@ type Query {
 }
 
 type Mutation {
+  addMessage(roomId: String!, name: String!, text: String!): Boolean
   addRoom(name: String!): Room
 }

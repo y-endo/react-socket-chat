@@ -17,7 +17,15 @@ export interface Message {
 }
 
 export interface Mutation {
+  addMessage?: Maybe<Scalars['Boolean']>,
   addRoom?: Maybe<Room>,
+}
+
+
+export interface MutationAddMessageArgs {
+  roomId: Scalars['String'],
+  name: Scalars['String'],
+  text: Scalars['String']
 }
 
 
@@ -42,6 +50,15 @@ export interface Room {
   messages: Array<Maybe<Message>>,
   createdAt: Scalars['String'],
 }
+
+export type AddMessageMutationVariables = {
+  roomId: Scalars['String'],
+  name: Scalars['String'],
+  text: Scalars['String']
+};
+
+
+export type AddMessageMutation = Pick<Mutation, 'addMessage'>;
 
 export type AddRoomMutationVariables = {
   name: Scalars['String']
@@ -172,6 +189,7 @@ export type MessageResolvers<ContextType = any, ParentType extends ResolversPare
 };
 
 export type MutationResolvers<ContextType = any, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = {
+  addMessage?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationAddMessageArgs, 'roomId' | 'name' | 'text'>>,
   addRoom?: Resolver<Maybe<ResolversTypes['Room']>, ParentType, ContextType, RequireFields<MutationAddRoomArgs, 'name'>>,
 };
 
