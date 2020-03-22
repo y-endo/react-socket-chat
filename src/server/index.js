@@ -58,29 +58,40 @@ app.get('*', (req, res) => {
 });
 
 io.on('connection', socket => {
+  console.log('[socket.io] Connected.');
   let room = null;
 
   // チャットルーム作成
   socket.on('addRoom', () => {
+    console.log('[socket.io] addRoom');
     socket.emit('addRoom');
   });
 
   // 入室
   socket.on('join', roomId => {
+    console.log('[socket.io] join', roomId);
     room = roomId;
     socket.join(room);
   });
   // 退室
   socket.on('leave', roomId => {
+    console.log('[socket.io] leave', roomId);
     socket.leave(roomId);
   });
   // チャット受信+送信
-  socket.on('addMessage', message => {
-    if (room) io.to(room).emit('addMessage', message);
+  socket.on('addMessage', () => {
+    console.log('[socket.io] addMessage');
+    if (room) io.to(room).emit('addMessage');
   });
-  // ブロードキャストチャット
-  socket.on('addMessageBroadcast', message => {
-    if (room) socket.broadcast.to(room).emit('addMessage', message);
+  // // ブロードキャストチャット
+  // socket.on('addMessageBroadcast', message => {
+  //   console.log('[socket.io] addMessageBroadcast');
+  //   if (room) socket.broadcast.to(room).emit('addMessage', message);
+  // });
+
+  // 切断
+  socket.on('disconnect', reason => {
+    console.log('[socket.io] disconnect', reason);
   });
 });
 

@@ -18,7 +18,13 @@ const App: React.FC = () => {
   const dispatch = useDispatch();
 
   React.useEffect(() => {
-    dispatch(setSocket(io()));
+    dispatch(
+      setSocket(
+        io({
+          autoConnect: false
+        })
+      )
+    );
   }, []);
 
   return (

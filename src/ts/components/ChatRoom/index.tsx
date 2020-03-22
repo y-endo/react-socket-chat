@@ -1,8 +1,8 @@
 import * as React from 'react';
 import gql from 'graphql-tag';
 import { useSelector } from 'react-redux';
-import { useQuery, useMutation } from '@apollo/react-hooks';
-import queryRoom from '~/graphql/queries/room.graphql';
+import { useLazyQuery, useMutation } from '@apollo/react-hooks';
+import queryRoomGQL from '~/graphql/queries/room.graphql';
 import mutationAddMessageGQL from '~/graphql/mutations/addMessage.graphql';
 import { AddMessageMutation, AddMessageMutationVariables } from '~/graphql/schema';
 import { StoreState } from '~/ts/store';
@@ -18,50 +18,56 @@ const ChatRoom: React.FC<Props> = ({ roomId }) => {
   const socket = useSelector<StoreState, StoreState['app']['socket']>(state => state.app.socket);
   // const sessionId = useSelector<StoreState, StoreState['app']['sessionId']>(state => state.app.sessionId);
   const userName = useSelector<StoreState, StoreState['app']['userName']>(state => state.app.userName);
-  const { loading, error, data, refetch } = useQuery(
+  const [queryRoom, { loading, error, data, refetch }] = useLazyQuery(
     gql`
-      ${queryRoom}
+      ${queryRoomGQL}
     `,
-    {
-      variables: { id: roomId }
-    }
+    { variables: { id: roomId } }
   );
+
   const [mutationAddMessage] = useMutation<AddMessageMutation, AddMessageMutationVariables>(gql`
     ${mutationAddMessageGQL}
   `);
 
-  const emitMessage = React.useCallback(
-    (message: string, isBroadcast = false) => {
-      if (socket) socket.emit(isBroadcast ? 'addMessageBroadcast' : 'addMessage', message);
+  const addMessage = React.useCallback(
+    async (message: string) => {
+      const isAdded = await mutationAddMessage({
+        variables: {
+          roomId,
+          name: userName,
+          text: message
+        }
+      });
+      if (isAdded && socket) {
+        socket.emit('addMessage');
+      }
     },
     [socket]
   );
 
-  const addMessage = async (message: string) => {
-    await mutationAddMessage({
-      variables: {
-        roomId,
-        name: userName,
-        text: message
-      }
-    });
-
-    refetch();
-  };
-
   React.useEffect(() => {
+    queryRoom();
+
     if (socket) {
-      socket.on('addMessage', addMessage);
+      socket.open();
       socket.emit('join', roomId);
     }
 
     return () => {
       if (socket) {
+        socket.close();
         socket.emit('leave', roomId);
         socket.off('addMessage');
       }
     };
   }, []);
+
+  React.useEffect(() => {
+    if (socket) {
+      socket.off('addMessage');
+      socket.on('addMessage', refetch);
+    }
+  });
 
   if (loading) {
     return <div>読込中...</div>;
@@ -74,7 +80,7 @@ const ChatRoom: React.FC<Props> = ({ roomId }) => {
       <>
         <h1>{data.room.name}</h1>
         <MessageList messages={data.room.messages} />
-        <Input emitMessage={emitMessage} />
+        <Input addMessage={addMessage} />
       </>
     );
   }

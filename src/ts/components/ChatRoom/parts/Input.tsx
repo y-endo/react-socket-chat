@@ -1,10 +1,10 @@
 import * as React from 'react';
 
 type Props = {
-  emitMessage: (message: string) => void;
+  addMessage: (message: string) => void;
 };
 
-const Input: React.FC<Props> = React.memo(({ emitMessage }) => {
+const Input: React.FC<Props> = React.memo(({ addMessage }) => {
   const input = React.useRef<HTMLInputElement>(null);
 
   const onSubmit = (event: React.FormEvent) => {
@@ -14,7 +14,7 @@ const Input: React.FC<Props> = React.memo(({ emitMessage }) => {
       const value = input.current.value;
 
       if (value !== '') {
-        emitMessage(value);
+        addMessage(value);
         input.current.value = '';
       }
     }

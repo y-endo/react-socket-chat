@@ -1,29 +1,26 @@
 import * as React from 'react';
 import gql from 'graphql-tag';
-import { useSelector } from 'react-redux';
-import { useQuery } from '@apollo/react-hooks';
+import { useLazyQuery } from '@apollo/react-hooks';
 import { useTransition, animated } from 'react-spring';
-import queryRooms from '~/graphql/queries/rooms.graphql';
+import queryRoomsGQL from '~/graphql/queries/rooms.graphql';
 import { withRouter, RouteComponentProps } from 'react-router';
 import Layout from '~/ts/layouts/default';
 import RoomList from '~/ts/components/RoomList';
 import Modal from '~/ts/components/Modal';
 import CreateRoomForm from '~/ts/components/CreateRoomForm';
-import { StoreState } from '~/ts/store';
 
 type Props = RouteComponentProps;
 
 const Index: React.FC<Props> = ({ history }) => {
-  const socket = useSelector<StoreState, StoreState['app']['socket']>(state => state.app.socket);
   const [isModalOpen, setIsModalOpen] = React.useState(false);
   const transition = useTransition(isModalOpen, null, {
     from: { opacity: 0 },
     enter: { opacity: 1 },
     leave: { opacity: 0 }
   });
-  const { loading, error, data } = useQuery(
+  const [queryRooms, { loading, error, data }] = useLazyQuery(
     gql`
-      ${queryRooms}
+      ${queryRoomsGQL}
     `
   );
 
@@ -37,6 +34,10 @@ const Index: React.FC<Props> = ({ history }) => {
 
   const closeModal = React.useCallback(() => {
     setIsModalOpen(false);
+  }, []);
+
+  React.useEffect(() => {
+    queryRooms();
   }, []);
 
   if (loading) {
