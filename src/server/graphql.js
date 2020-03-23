@@ -24,7 +24,6 @@ const RoomModel = mongoose.model(
     {
       id: String,
       name: String,
-      count: Number,
       messages: [
         {
           name: String,
@@ -61,7 +60,6 @@ const resolvers = {
       const room = new RoomModel({
         id: uuid.v4(),
         name: args.name,
-        count: 1,
         messages: [],
         createdAt: String(new Date())
       });

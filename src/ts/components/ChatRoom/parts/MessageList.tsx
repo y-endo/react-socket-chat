@@ -1,5 +1,4 @@
 import * as React from 'react';
-// import { Message } from '~/ts/modules/ChatRoom';
 import { Message } from '~/graphql/schema';
 
 type Props = {

@@ -16,7 +16,6 @@ type Props = {
 
 const ChatRoom: React.FC<Props> = ({ roomId }) => {
   const socket = useSelector<StoreState, StoreState['app']['socket']>(state => state.app.socket);
-  // const sessionId = useSelector<StoreState, StoreState['app']['sessionId']>(state => state.app.sessionId);
   const userName = useSelector<StoreState, StoreState['app']['userName']>(state => state.app.userName);
   const [queryRoom, { loading, error, data, refetch }] = useLazyQuery(
     gql`
@@ -55,9 +54,9 @@ const ChatRoom: React.FC<Props> = ({ roomId }) => {
 
     return () => {
       if (socket) {
-        socket.close();
         socket.emit('leave', roomId);
         socket.off('addMessage');
+        socket.close();
       }
     };
   }, []);

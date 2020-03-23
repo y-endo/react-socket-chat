@@ -11,7 +11,6 @@ const RoomList: React.FC<Props> = ({ data }) => {
     <li>
       <Link to={`/room/${data.id}`}>
         <p>RoomName {data.name}</p>
-        <p>member {data.count}</p>
       </Link>
     </li>
   );

@@ -2,7 +2,6 @@ query rooms {
   rooms {
     id
     name
-    count
     messages {
       name
       text

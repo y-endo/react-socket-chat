@@ -4,21 +4,24 @@ import { useLazyQuery } from '@apollo/react-hooks';
 import { useTransition, animated } from 'react-spring';
 import queryRoomsGQL from '~/graphql/queries/rooms.graphql';
 import { withRouter, RouteComponentProps } from 'react-router';
+import { useSelector } from 'react-redux';
 import Layout from '~/ts/layouts/default';
 import RoomList from '~/ts/components/RoomList';
 import Modal from '~/ts/components/Modal';
 import CreateRoomForm from '~/ts/components/CreateRoomForm';
+import { StoreState } from '~/ts/store';
 
 type Props = RouteComponentProps;
 
 const Index: React.FC<Props> = ({ history }) => {
+  const socket = useSelector<StoreState, StoreState['app']['socket']>(state => state.app.socket);
   const [isModalOpen, setIsModalOpen] = React.useState(false);
   const transition = useTransition(isModalOpen, null, {
     from: { opacity: 0 },
     enter: { opacity: 1 },
     leave: { opacity: 0 }
   });
-  const [queryRooms, { loading, error, data }] = useLazyQuery(
+  const [queryRooms, { loading, error, data, refetch }] = useLazyQuery(
     gql`
       ${queryRoomsGQL}
     `
@@ -28,7 +31,8 @@ const Index: React.FC<Props> = ({ history }) => {
     setIsModalOpen(true);
   };
 
-  const addRoomComplete = React.useCallback((roomId: string) => {
+  const redirectRoom = React.useCallback((roomId: string) => {
+    if (socket) socket.emit('addRoom');
     history.push(`/room/${roomId}`);
   }, []);
 
@@ -38,7 +42,27 @@ const Index: React.FC<Props> = ({ history }) => {
 
   React.useEffect(() => {
     queryRooms();
+
+    if (socket) {
+      socket.open();
+      socket.emit('join', 'entrance');
+    }
+
+    return () => {
+      if (socket) {
+        socket.emit('leave', 'entrance');
+        socket.off('addRoom');
+        socket.close();
+      }
+    };
   }, []);
+
+  React.useEffect(() => {
+    if (socket) {
+      socket.off('addRoom');
+      socket.on('addRoom', refetch);
+    }
+  });
 
   if (loading) {
     return <Layout content={<div>読込中...</div>} />;
@@ -56,7 +80,7 @@ const Index: React.FC<Props> = ({ history }) => {
             ({ item, key, props }) =>
               item && (
                 <animated.div style={props} key={key}>
-                  <Modal content={<CreateRoomForm addRoomComplete={addRoomComplete} />} closeModal={closeModal} />
+                  <Modal content={<CreateRoomForm redirectRoom={redirectRoom} />} closeModal={closeModal} />
                 </animated.div>
               )
           )}

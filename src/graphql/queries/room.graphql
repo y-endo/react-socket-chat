@@ -2,7 +2,6 @@ query room($id: String!) {
   room(id: $id) {
     id
     name
-    count
     messages {
       name
       text

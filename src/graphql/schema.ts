@@ -46,7 +46,6 @@ export interface QueryRoomArgs {
 export interface Room {
   id: Scalars['String'],
   name: Scalars['String'],
-  count: Scalars['Int'],
   messages: Array<Maybe<Message>>,
   createdAt: Scalars['String'],
 }
@@ -66,7 +65,7 @@ export type AddRoomMutationVariables = {
 
 
 export type AddRoomMutation = { addRoom: Maybe<(
-    Pick<Room, 'id' | 'name' | 'count' | 'createdAt'>
+    Pick<Room, 'id' | 'name' | 'createdAt'>
     & { messages: Array<Maybe<Pick<Message, 'name' | 'text' | 'postedAt'>>> }
   )> };
 
@@ -76,7 +75,7 @@ export type RoomQueryVariables = {
 
 
 export type RoomQuery = { room: Maybe<(
-    Pick<Room, 'id' | 'name' | 'count' | 'createdAt'>
+    Pick<Room, 'id' | 'name' | 'createdAt'>
     & { messages: Array<Maybe<Pick<Message, 'name' | 'text' | 'postedAt'>>> }
   )> };
 
@@ -84,7 +83,7 @@ export type RoomsQueryVariables = {};
 
 
 export type RoomsQuery = { rooms: Maybe<Array<Maybe<(
-    Pick<Room, 'id' | 'name' | 'count' | 'createdAt'>
+    Pick<Room, 'id' | 'name' | 'createdAt'>
     & { messages: Array<Maybe<Pick<Message, 'name' | 'text' | 'postedAt'>>> }
   )>>> };
 
@@ -164,7 +163,6 @@ export type ResolversTypes = {
   Query: ResolverTypeWrapper<{}>,
   Room: ResolverTypeWrapper<Room>,
   String: ResolverTypeWrapper<Scalars['String']>,
-  Int: ResolverTypeWrapper<Scalars['Int']>,
   Message: ResolverTypeWrapper<Message>,
   Mutation: ResolverTypeWrapper<{}>,
   Boolean: ResolverTypeWrapper<Scalars['Boolean']>,
@@ -175,7 +173,6 @@ export type ResolversParentTypes = {
   Query: {},
   Room: Room,
   String: Scalars['String'],
-  Int: Scalars['Int'],
   Message: Message,
   Mutation: {},
   Boolean: Scalars['Boolean'],
@@ -201,7 +198,6 @@ export type QueryResolvers<ContextType = any, ParentType extends ResolversParent
 export type RoomResolvers<ContextType = any, ParentType extends ResolversParentTypes['Room'] = ResolversParentTypes['Room']> = {
   id?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
   name?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
-  count?: Resolver<ResolversTypes['Int'], ParentType, ContextType>,
   messages?: Resolver<Array<Maybe<ResolversTypes['Message']>>, ParentType, ContextType>,
   createdAt?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
   __isTypeOf?: isTypeOfResolverFn<ParentType>,

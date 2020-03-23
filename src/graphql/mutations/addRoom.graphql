@@ -2,7 +2,6 @@ mutation addRoom($name: String!) {
   addRoom(name: $name) {
     id
     name
-    count
     messages {
       name
       text

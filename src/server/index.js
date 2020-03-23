@@ -64,9 +64,8 @@ io.on('connection', socket => {
   // チャットルーム作成
   socket.on('addRoom', () => {
     console.log('[socket.io] addRoom');
-    socket.emit('addRoom');
+    io.to('entrance').emit('addRoom');
   });
-
   // 入室
   socket.on('join', roomId => {
     console.log('[socket.io] join', roomId);

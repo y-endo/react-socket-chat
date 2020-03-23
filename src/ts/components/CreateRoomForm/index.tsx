@@ -5,10 +5,10 @@ import mutationAddRoomGQL from '~/graphql/mutations/addRoom.graphql';
 import { AddRoomMutation, AddRoomMutationVariables } from '~/graphql/schema';
 
 type Props = {
-  addRoomComplete: (roomId: string) => void;
+  redirectRoom: (roomId: string) => void;
 };
 
-const CreateReactForm: React.FC<Props> = React.memo(({ addRoomComplete }) => {
+const CreateReactForm: React.FC<Props> = React.memo(({ redirectRoom }) => {
   const input = React.useRef<HTMLInputElement>(null);
   const [mutationAddRoom] = useMutation<AddRoomMutation, AddRoomMutationVariables>(gql`
     ${mutationAddRoomGQL}
@@ -24,7 +24,7 @@ const CreateReactForm: React.FC<Props> = React.memo(({ addRoomComplete }) => {
     });
 
     if (data && data.addRoom) {
-      addRoomComplete(data.addRoom.id);
+      redirectRoom(data.addRoom.id);
     }
   };
 

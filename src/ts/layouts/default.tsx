@@ -1,7 +1,6 @@
 import * as React from 'react';
 
 import AppHeader from '~/ts/components/App/AppHeader';
-import AppFooter from '~/ts/components/App/AppFooter';
 import MainContent from '~/ts/components/MainContent';
 
 type Props = {
@@ -13,7 +12,6 @@ const Layout: React.FC<Props> = ({ content }) => {
     <>
       <AppHeader />
       <MainContent>{content}</MainContent>
-      <AppFooter />
     </>
   );
 };
