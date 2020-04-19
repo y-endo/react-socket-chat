@@ -1,4 +1,5 @@
 import * as React from 'react';
+import css from '~/scss/elements/Button/index.scss';
 import gql from 'graphql-tag';
 import { useLazyQuery } from '@apollo/react-hooks';
 import { useTransition, animated } from 'react-spring';
@@ -73,7 +74,9 @@ const Index: React.FC<Props> = ({ history }) => {
   if (data) {
     const content = (
       <>
-        <button onClick={handleButtonClick}>チャットルーム作成</button>
+        <button onClick={handleButtonClick} className={css['button']}>
+          チャットルーム作成
+        </button>
         <RoomList rooms={data.rooms} />
         <>
           {transition.map(
